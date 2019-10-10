@@ -1,0 +1,16 @@
+version: '1.0'
+stages:
+  - stage1
+steps:
+ codefresh-run:
+    title: Run Master Devops Pipeline
+    stage: stage1
+    type: codefresh-run
+    arguments:
+      PIPELINE_ID: languages-java-pipeline
+      VARIABLE:
+        - CF_REPO_OWNER=${{CF_REPO_OWNER}}
+        - CF_REPO_NAME=${{CF_REPO_NAME}}
+        - CF_BRANCH=${{CF_BRANCH}}
+        - CF_REVISION=${{CF_REVISION}} 
+
