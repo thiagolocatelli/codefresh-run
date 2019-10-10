@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 export BUILD_TYPE=$([[ ( -z "$BUILD_TYPE" ) && ( -f pom.xml ) ]] && echo JAVA_MAVEN || echo $BUILD_TYPE)
 
