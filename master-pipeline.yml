@@ -1,16 +1,47 @@
 version: '1.0'
 stages:
-  - stage1
+  - prepare
+  - execute
 steps:
- codefresh-run:
-    title: Run Master Devops Pipeline
-    stage: stage1
+  main_clone:
+    title: Cloning Main Repository...
+    stage: prepare
+    type: git-clone
+    repo: 'thiagolocatelli/codefresh-run'
+    revision: master
+    git: github
+
+  ExecuteJavaMavenBuild:
+    title: Run Java Pipeline
+    stage: execute
     type: codefresh-run
     arguments:
-      PIPELINE_ID: languages-java-pipeline
+      PIPELINE_ID: 5d9faab63d6ece7ee35b766f
+      VARIABLE: 
+        - CF_REPO_OWNER=${{CF_REPO_OWNER}}
+        - CF_REPO_NAME=${{CF_REPO_NAME}}
+        - CF_BRANCH=${{CF_BRANCH}}
+        - CF_REVISION=${{CF_REVISION}}
+        - BUILD_TYPE=${{BUILD_TYPE}}
+        - BUILD_TYPE=${{BUILD_TYPE}}
+    when:
+      condition:
+        all:
+          isDevelopBranch: 'match("${{BUILD_TYPE}}", "JAVA_MAVEN", true) == true'
+          
+  ExecuteJavaGradleBuild:
+    title: Run Gradle Pipeline
+    stage: execute
+    type: codefresh-run
+    arguments:
+      PIPELINE_ID: 5d9fc86a3d6eceb1445b7677
       VARIABLE:
         - CF_REPO_OWNER=${{CF_REPO_OWNER}}
         - CF_REPO_NAME=${{CF_REPO_NAME}}
         - CF_BRANCH=${{CF_BRANCH}}
-        - CF_REVISION=${{CF_REVISION}} 
-
+        - CF_REVISION=${{CF_REVISION}}
+        - BUILD_TYPE=${{BUILD_TYPE}}
+    when:
+      condition:
+        all:
+          isDevelopBranch: 'match("${{BUILD_TYPE}}", "JAVA_GRADLE", true) == true'
